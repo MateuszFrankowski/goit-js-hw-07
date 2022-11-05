@@ -42,11 +42,15 @@ gallery.addEventListener("click", (event) => {
   const modalImg = img.querySelector("img");
   modalImg.src = largeImgUrl;
   modalImg.alt = largeImgAlt;
-  instance.show();
-});
 
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
-    instance.close();
-  }
+  instance.show();
+  const modal = document.querySelector("div.modal");
+  modal.addEventListener("keydown", (event) => {
+    console.log("test");
+    if (event.key === "Escape") {
+      instance.close();
+      modal.removeEventListener("keydown", event);
+    }
+  });
+  console.log("xd");
 });
