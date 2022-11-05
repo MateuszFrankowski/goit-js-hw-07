@@ -10,31 +10,35 @@ const instance = basicLightbox.create(
     </div>
 `
 );
-
 const gallery = document.querySelector("div.gallery");
-console.log(gallery);
 const markup = galleryItems
   .map(
     ({ preview, original, description }) =>
-      `
-    <img
-      class="gallery__image"
-      src="${preview}"
-      data-source="${original}"
-      alt="${description}"
-    />
-  </a>
-</div>`
+      ` <div class="gallery__item">
+        <a class="gallery__link" href="${original}">
+        <img
+        class="gallery__image"
+        src="${preview}"
+        data-source="${original}"
+        alt="${description}"
+      />
+      </a>
+      </div>`
   )
   .join("");
 
 gallery.insertAdjacentHTML("afterbegin", markup);
-
+const closeModal = (event) => {
+  if (event.key === "Escape") {
+    instance.close();
+    return document.removeEventListener("keydown", closeModal);
+  }
+};
 const IMG = document.querySelector("img");
 gallery.addEventListener("click", (event) => {
   event.preventDefault();
   const clickedElement = event.target;
-  console.log(clickedElement);
+
   if (clickedElement.nodeName !== "IMG") return;
   const largeImgAlt = clickedElement.alt;
   const largeImgUrl = clickedElement.dataset.source;
@@ -42,15 +46,6 @@ gallery.addEventListener("click", (event) => {
   const modalImg = img.querySelector("img");
   modalImg.src = largeImgUrl;
   modalImg.alt = largeImgAlt;
-
+  document.addEventListener("keydown", closeModal);
   instance.show();
-  const modal = document.querySelector("div.modal");
-  modal.addEventListener("keydown", (event) => {
-    console.log("test");
-    if (event.key === "Escape") {
-      instance.close();
-      modal.removeEventListener("keydown", event);
-    }
-  });
-  console.log("xd");
 });
